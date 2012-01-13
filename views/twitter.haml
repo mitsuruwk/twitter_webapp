@@ -1,0 +1,81 @@
+!!! 5
+%html
+  %head
+    %meta{:charset => 'utf-8'}
+
+    -# setting for iOS
+    %meta{:name => 'apple-mobile-web-app-capable', :content => 'yes'}
+    %meta{:name => 'apple-mobile-web-app-status-bar-style', :content => 'black'}
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale = 1, user-scalable = no'}
+    %link{:rel => "apple-touch-icon-precomposed", :href => ""}
+
+    %title Twitter Web App
+
+    %link{:rel => "shortcut icon", :href => ""}
+    %link{:rel => "stylesheet", :href => "https://ajax.googleapis.com/ajax/libs/yui/3/build/cssreset/reset-min.css"}
+    %link{:rel => "stylesheet", :href => "screen.css"}
+
+    -# template for search screen
+    %script{:type => "text/template", :id => "search-template"}
+      .search
+        %input{:placeholder => "account or list", :type => "search", :value => "yukihiro_matz"}
+
+    -# template for tweet list
+    %script{:type => "text/template", :id => "tweet-template"}
+      .tweets      
+        :plain
+          <% _.each(json, function(tweet) { %> 
+        .tweet
+          .profile-image
+            %image{:src => "<%= tweet.user.profile_image_url %>"} 
+          .contents
+            .user-name
+              %span.screen-name
+                :plain
+                  <%= tweet.user.screen_name %>
+              %span.name
+                :plain
+                  <%= tweet.user.name %>
+            .text
+              :plain
+                <%= tweet.text %>
+            .created-at
+              :plain
+                <%= tweet.created_at %>
+        :plain
+          <% }); %> 
+
+    -# template for user list
+    %script{:type => "text/template", :id => "users-template"}
+      .users
+        :plain
+          <% _.each(json, function(user) { %> 
+        .user
+          .profile-image
+            %image{:src => "<%= user.profile_image_url %>"} 
+          .contents
+            .user-name
+              %span.screen-name
+                :plain
+                  <%= user.screen_name %>
+              %span.name
+                :plain
+                  <%= user.name %>
+            .text
+              :plain
+                <%= user.description %>
+            .created-at
+              :plain
+                <%= user.status ? user.status.created_at : "" %>
+        :plain
+          <% }); %> 
+
+  %body
+    #screen
+
+    %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"}
+    %script{:src => "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js"}
+    %script{:src => "http://cdnjs.cloudflare.com/ajax/libs/require.js/1.0.1/require.min.js"}
+    %script{:src => "twitter_api.js"}
+    %script{:src => "main.js"}
+
