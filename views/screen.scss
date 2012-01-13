@@ -1,0 +1,51 @@
+#screen {
+    width: 320px;
+    // border: 1px dashed  blue;
+    overflow-x: hidden;
+
+    .search {
+        font: 16px;
+        margin: 10px;
+        text-align: center;
+    }
+
+    .tweet , .user {
+        width: 300px;
+        padding: 10px 10px 10px 10px;
+
+        .profile-image {
+            float: left;
+            margin: 3px;
+            height: 48px;
+            width: 48px;
+            overflow: hidden;
+        }
+
+        .contents {
+            margin-left: 58px;
+            min-height: 48px;
+
+            .user-name {
+                .screen-name {
+                    font-size: 15px;
+                    font-weight: bold;
+                }
+                .name {
+                    color: #999;
+                    font-size: 12px;
+                }
+            }
+            .text {
+                margin: 3px;
+                font-size: 15px;
+            }
+            .created-at {
+                margin: 3px;
+                font-size: 11px;
+                color: #999;
+            }
+        }
+    }
+}
+
+
