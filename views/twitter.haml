@@ -1,5 +1,5 @@
 !!! 5
-%html
+%html{:manifest => "manifest.cache"}
   %head
     %meta{:charset => 'utf-8'}
 
@@ -12,22 +12,34 @@
     %title Twitter Web App
 
     %link{:rel => "shortcut icon", :href => ""}
-    %link{:rel => "stylesheet", :href => "https://ajax.googleapis.com/ajax/libs/yui/3/build/cssreset/reset-min.css"}
+    %link{:rel => "stylesheet", :href => "static/css/reset-min.css"}
     %link{:rel => "stylesheet", :href => "screen.css"}
 
     -# template for search screen
     %script{:type => "text/template", :id => "search-template"}
       .search
-        %input{:placeholder => "account or list", :type => "search", :value => "yukihiro_matz"}
+        %input{:placeholder => "keyword", :type => "search"}
+
+    %script{:type => "text/template", :id => "tweet-image-template"}
+      %style#profile-image-style
+        :plain
+          #screen .tweet .profile-image {
+            background-image: url("<%= src %>");
+          }
 
     -# template for tweet list
     %script{:type => "text/template", :id => "tweet-template"}
+      :plain
+        <% if (json.show_link) { %> 
+      %a{:href => "javascript:window.open(window.location);"}
+        %img{:src => "http://a0.twimg.com/a/1326412195/t1/img/twitter_logo_top_bar.png"}
+      :plain
+        <% } %> 
       .tweets      
         :plain
           <% _.each(json, function(tweet) { %> 
         .tweet
           .profile-image
-            %image{:src => "<%= tweet.user.profile_image_url %>"} 
           .contents
             .user-name
               %span.screen-name
@@ -73,9 +85,9 @@
   %body
     #screen
 
-    %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"}
-    %script{:src => "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js"}
-    %script{:src => "http://cdnjs.cloudflare.com/ajax/libs/require.js/1.0.1/require.min.js"}
+    %script{:src => "static/js/jquery-1.7.1.min.js"}
+    %script{:src => "static/js/underscore-min.js"}
+    %script{:src => "static/js/require-min.js"}
     %script{:src => "twitter_api.js"}
     %script{:src => "main.js"}
 

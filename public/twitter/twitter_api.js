@@ -1,8 +1,7 @@
 define("twitter_api", function () {
     $.ajaxSetup({
-        dataType: "jsonp",
-        cache: true,
-        jsonpCallback: "jsonpCallback"
+        dataType: "json",
+        cache: true
     });
 
     return {
@@ -52,6 +51,15 @@ define("twitter_api", function () {
        },
        lists_members : function (data, callback) {
            var url = "https://api.twitter.com/1/lists/members.json";
+
+           this._ajax_with_cache({
+               url: url,
+               data: data,
+               success: callback
+           });
+       },
+       search_in_profile : function (data, callback) {
+           var url = "http://api.twpro.jp/1/search";
 
            this._ajax_with_cache({
                url: url,
