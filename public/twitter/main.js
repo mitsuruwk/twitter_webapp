@@ -37,15 +37,16 @@ require(["twitter_api"], function(TwitterAPI) {
             },
             update_link_icon = function (src, title) {
                 load_image(src, function (src) {
-                    $($.grep($("link"), function (n) {
-                        var rel = $(n).attr("rel");
-                        return (rel === "apple-touch-icon-precomposed") ||
-                            (rel === "shortcut icon");      
-                    })).attr("href", src);
-
                     $("#profile-image-style").remove();
                     $("head").append(tweet_image_template({src:src}));
                 });
+
+                $($.grep($("link"), function (n) {
+                    var rel = $(n).attr("rel");
+                    return (rel === "apple-touch-icon-precomposed") ||
+                        (rel === "icon") || (rel === "shortcut");
+                })).attr("href", src);
+
                 $("title").text(title);
             },
             render = function (json, template) {
@@ -59,9 +60,7 @@ require(["twitter_api"], function(TwitterAPI) {
                 };
 
                 TwitterAPI.users_lookup_friends_ids(data, function (json) {
-                    json.unshift(json.pop());
                     render(json, users_template);
-                    json.push(json.shift());
                 });
             },            
             show_list_members = function (owner_screen_name, slug) {
@@ -79,7 +78,7 @@ require(["twitter_api"], function(TwitterAPI) {
                     }
                 });
             },
-            _show_user_timeline = function (json) {
+            _show_user_timeline = function (screen_name, json) {
                 var user;
 
                 render(json, tweet_template);
@@ -87,6 +86,8 @@ require(["twitter_api"], function(TwitterAPI) {
                     user = json[0].user;
                     update_link_icon(user.profile_image_url,
                                      user.name);
+                    localStorage[screen_name + "/profile_image_url"] =
+                        user.profile_image_url;
                 }
             },
             show_user_timeline = function (screen_name) {
@@ -97,13 +98,13 @@ require(["twitter_api"], function(TwitterAPI) {
                 cache = localStorage[screen_name];
                     
                 if (cache) {
-                    _show_user_timeline(JSON.parse(cache));
+                    _show_user_timeline(screen_name, JSON.parse(cache));
                 }
 
                 TwitterAPI.user_timeline(data, function (json) {
                     json.show_link = show_link;
-                    _show_user_timeline(json);
-                    localStorage[screen_name] = JSON.stringify(json);                         
+                    _show_user_timeline(screen_name, json);
+                    localStorage[screen_name] = JSON.stringify(json);
                 });
             },
             show_search_input = function () {
